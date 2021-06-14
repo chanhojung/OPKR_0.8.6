@@ -97,6 +97,7 @@ static void update_line_data(const UIState *s, const cereal::ModelDataV2::XYZTDa
 }
 
 static void update_model(UIState *s, const cereal::ModelDataV2::Reader &model) {
+  SubMaster &sm = *(s->sm);
   UIScene &scene = s->scene;
   auto model_position = model.getPosition();
   float max_distance = std::clamp(model_position.getX()[TRAJECTORY_SIZE - 1],
@@ -119,6 +120,8 @@ static void update_model(UIState *s, const cereal::ModelDataV2::Reader &model) {
     update_line_data(s, road_edges[i], 0.025, 0, &scene.road_edge_vertices[i], max_idx);
   }
 
+  scene.lateral_plan = sm["lateralPlan"].getLateralPlan();
+
   // update path
   auto lead_one = (*s->sm)["radarState"].getRadarState().getLeadOne();
   if (lead_one.getStatus()) {
@@ -126,7 +129,14 @@ static void update_model(UIState *s, const cereal::ModelDataV2::Reader &model) {
     max_distance = std::clamp((float)(lead_d - fmin(lead_d * 0.35, 10.)), 0.0f, max_distance);
   }
   max_idx = get_path_length_idx(model_position, max_distance);
+  if (scene.map_on_overlay) {
+    update_line_data(s, model_position, 0.7, 1.22, &scene.track_vertices, max_idx);
+  } else if (!scene.lateralPlan.lanelessModeStatus) {
+    update_line_data(s, model_position, 0.55, 1.22, &scene.track_vertices, max_idx);
+  } else {
+    update_line_data(s, model_position, 0.25, 1.22, &scene.track_vertices, max_idx);  
   update_line_data(s, model_position, 0.5, 1.22, &scene.track_vertices, max_idx);
+  }
 }
 
 static void update_sockets(UIState *s) {
@@ -336,6 +346,10 @@ static void update_status(UIState *s) {
       s->status = STATUS_WARNING;
     } else if (alert_status == cereal::ControlsState::AlertStatus::CRITICAL) {
       s->status = STATUS_ALERT;
+    } else if (s->scene.brakePress) {
+      s->status = STATUS_BRAKE;
+    } else if (s->scene.cruiseAccStatus) {
+      s->status = STATUS_CRUISE;      
     } else {
       s->status = controls_state.getEnabled() ? STATUS_ENGAGED : STATUS_DISENGAGED;
     }
