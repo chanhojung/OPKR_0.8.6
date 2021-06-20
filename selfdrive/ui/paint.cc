@@ -421,6 +421,7 @@ static void ui_draw_debug(UIState *s)
         ui_print(s, ui_viz_rx, ui_viz_ry+650, "LP:model");
       }
     }
+    if (s->scene.map_is_running) ui_print(s, ui_viz_rx, ui_viz_ry+700, "MS:%.0f", scene.mapSign);
     nvgFontSize(s->vg, 40);
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
     if (scene.lateralControlMethod == 0) {
@@ -1089,7 +1090,7 @@ static void draw_navi_button(UIState *s) {
   if (s->vipc_client->connected || s->is_OpenpilotViewEnabled) {
     int btn_w = 140;
     int btn_h = 140;
-    int btn_x1 = s->viz_rect.x + s->viz_rect.w - btn_w - 195;
+    int btn_x1 = s->viz_rect.x + s->viz_rect.w - btn_w - 355;
     int btn_y = 1080 - btn_h - 35;
     int btn_xc1 = btn_x1 + (btn_w/2);
     int btn_yc = btn_y + (btn_h/2);
@@ -1100,6 +1101,11 @@ static void draw_navi_button(UIState *s) {
     nvgStrokeWidth(s->vg, 6);
     nvgStroke(s->vg);
     nvgFontSize(s->vg, 45);
+    if (s->scene.map_is_running) {
+      NVGcolor fillColor = nvgRGBA(0,0,255,80);
+      nvgFillColor(s->vg, fillColor);
+      nvgFill(s->vg);
+    }
     nvgFillColor(s->vg, nvgRGBA(255,255,255,200));
     nvgText(s->vg,btn_xc1,btn_yc,"NAVI",NULL);
   }
@@ -1109,7 +1115,7 @@ static void draw_laneless_button(UIState *s) {
   if (s->vipc_client->connected || s->is_OpenpilotViewEnabled) {
     int btn_w = 140;
     int btn_h = 140;
-    int btn_x1 = s->viz_rect.x + s->viz_rect.w - btn_w - 355;
+    int btn_x1 = s->viz_rect.x + s->viz_rect.w - btn_w - 195;
     int btn_y = 1080 - btn_h - 35;
     int btn_xc1 = btn_x1 + (btn_w/2);
     int btn_yc = btn_y + (btn_h/2);
@@ -1155,7 +1161,7 @@ static void ui_draw_vision_header(UIState *s) {
   if (!s->scene.comma_stock_ui) {
     bb_ui_draw_UI(s);
     ui_draw_tpms(s);
-    draw_navi_button(s);
+    if (s->scene.apks_enabled) draw_navi_button(s);
   }
   if (s->scene.end_to_end && !s->scene.comma_stock_ui) {
     draw_laneless_button(s);
