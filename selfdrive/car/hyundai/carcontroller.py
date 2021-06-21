@@ -134,6 +134,7 @@ class CarController():
     self.opkr_maxanglelimit = float(int(self.params.get("OpkrMaxAngleLimit", encoding="utf8")))
     self.mad_mode_enabled = self.params.get_bool("MadModeEnabled")
     self.ldws_fix = self.params.get_bool("LdwsCarFix")
+    self.apks_enabled = self.params.get_bool("OpkrApksEnable")
 
     self.steer_mode = ""
     self.mdps_status = ""
@@ -348,20 +349,6 @@ class CarController():
       if frame % 2: # send clu11 to mdps if it is not on bus 0
         can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.NONE, enabled_speed, CS.CP.mdpsBus))
 
-    str_log1 = 'CV={:03.0f} AS={:03.1f} TQ={:03.0f} ST={:03.0f}/{:01.0f}/{:01.0f} AQ={:+04.2f}'.format(abs(self.curve_speed), abs(self.anglesteer_desire), abs(new_steer), max(self.steerMax, abs(new_steer)), self.steerDeltaUp, self.steerDeltaDown, CS.scc12["aReqValue"])
-
-    try:
-      if self.params.get_bool("OpkrLiveTune"):
-        if int(self.params.get("LateralControlMethod", encoding="utf8")) == 0:
-          self.str_log2 = 'T={:0.2f}/{:0.3f}/{:0.2f}/{:0.5f}'.format(float(int(self.params.get("PidKp", encoding="utf8")) * 0.01), float(int(self.params.get("PidKi", encoding="utf8")) * 0.001), float(int(self.params.get("PidKd", encoding="utf8")) * 0.01), float(int(self.params.get("PidKf", encoding="utf8")) * 0.00001))
-        elif int(self.params.get("LateralControlMethod", encoding="utf8")) == 1:
-          self.str_log2 = 'T={:03.1f}/{:03.1f}/{:03.1f}/{:03.1f}'.format(float(int(self.params.get("InnerLoopGain", encoding="utf8")) * 0.1), float(int(self.params.get("OuterLoopGain", encoding="utf8")) * 0.1), float(int(self.params.get("TimeConstant", encoding="utf8")) * 0.1), float(int(self.params.get("ActuatorEffectiveness", encoding="utf8")) * 0.1))
-        elif int(self.params.get("LateralControlMethod", encoding="utf8")) == 2:
-          self.str_log2 = 'T={:04.0f}/{:05.3f}/{:06.4f}'.format(float(int(self.params.get("Scale", encoding="utf8")) * 1.0), float(int(self.params.get("LqrKi", encoding="utf8")) * 0.001), float(int(self.params.get("DcGain", encoding="utf8")) * 0.0001))
-    except:
-      pass
-    trace1.printf1('{}  {}'.format(str_log1, self.str_log2))
-
     if CS.out.cruiseState.modeSel == 0 and self.mode_change_switch == 4:
       self.mode_change_timer = 50
       self.mode_change_switch = 0
@@ -536,7 +523,7 @@ class CarController():
     if CS.CP.mdpsBus: # send mdps12 to LKAS to prevent LKAS error
       can_sends.append(create_mdps12(self.packer, frame, CS.mdps12))
 
-    if CS.CP.sccBus == 2 and self.counter_init and self.longcontrol:
+    if CS.CP.sccBus != 0 and self.counter_init and self.longcontrol:
       if frame % 2 == 0:
         self.scc12cnt += 1
         self.scc12cnt %= 0xF
@@ -594,6 +581,15 @@ class CarController():
       self.scc11cnt = CS.scc11init["AliveCounterACC"]
       self.fca11alivecnt = CS.fca11init["CR_FCA_Alive"]
       self.fca11supcnt = CS.fca11init["Supplemental_Counter"]
+
+    if self.apks_enabled:
+      str_log1 = 'CV={:03.0f} AS={:03.1f} TQ={:03.0f} ST={:03.0f}/{:01.0f}/{:01.0f} R/C={:+04.2f}/{:+04.2f}'.format( \
+        abs(self.curve_speed), abs(self.anglesteer_desire), abs(new_steer), max(self.steerMax, abs(new_steer)), self.steerDeltaUp, self.steerDeltaDown, CS.scc12["aReqValue"], apply_accel)
+    else:
+      str_log1 = 'CV={:03.0f} AS={:03.1f} TQ={:03.0f} ST={:03.0f}/{:01.0f}/{:01.0f} R/C={:+04.2f}/{:+04.2f} S={:.0f}/{:.0f}'.format( \
+        abs(self.curve_speed), abs(self.anglesteer_desire), abs(new_steer), max(self.steerMax, abs(new_steer)), self.steerDeltaUp, self.steerDeltaDown, CS.scc12["aReqValue"], apply_accel, int(CS.is_highway), CS.safety_sign_check)
+
+    trace1.printf1('{}  {}'.format(str_log1, self.str_log2))
 
     # 20 Hz LFA MFA message
     if frame % 5 == 0 and self.car_fingerprint in FEATURES["send_lfahda_mfa"]:
