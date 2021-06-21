@@ -582,12 +582,15 @@ class CarController():
       self.fca11alivecnt = CS.fca11init["CR_FCA_Alive"]
       self.fca11supcnt = CS.fca11init["Supplemental_Counter"]
 
+    aq_value = CS.scc12["aReqValue"] if CS.CP.sccBus == 0 else apply_accel
     if self.apks_enabled:
-      str_log1 = 'CV={:03.0f} AS={:03.1f} TQ={:03.0f} ST={:03.0f}/{:01.0f}/{:01.0f} R/C={:+04.2f}/{:+04.2f}'.format( \
-        abs(self.curve_speed), abs(self.anglesteer_desire), abs(new_steer), max(self.steerMax, abs(new_steer)), self.steerDeltaUp, self.steerDeltaDown, CS.scc12["aReqValue"], apply_accel)
+      str_log1 = 'CV={:03.0f} AS={:03.1f} TQ={:03.0f} ST={:03.0f}/{:01.0f}/{:01.0f} AQ={:+04.2f}'.format( \
+        abs(self.curve_speed), abs(self.anglesteer_desire), abs(new_steer), max(self.steerMax, abs(new_steer)), \
+        self.steerDeltaUp, self.steerDeltaDown, aq_value)
     else:
-      str_log1 = 'CV={:03.0f} AS={:03.1f} TQ={:03.0f} ST={:03.0f}/{:01.0f}/{:01.0f} R/C={:+04.2f}/{:+04.2f} S={:.0f}/{:.0f}'.format( \
-        abs(self.curve_speed), abs(self.anglesteer_desire), abs(new_steer), max(self.steerMax, abs(new_steer)), self.steerDeltaUp, self.steerDeltaDown, CS.scc12["aReqValue"], apply_accel, int(CS.is_highway), CS.safety_sign_check)
+      str_log1 = 'CV={:03.0f} AS={:03.1f} TQ={:03.0f} ST={:03.0f}/{:01.0f}/{:01.0f} AQ={:+04.2f} S={:.0f}/{:.0f}'.format( \
+        abs(self.curve_speed), abs(self.anglesteer_desire), abs(new_steer), max(self.steerMax, abs(new_steer)), \
+        self.steerDeltaUp, self.steerDeltaDown, aq_value, int(CS.is_highway), CS.safety_sign_check)
 
     trace1.printf1('{}  {}'.format(str_log1, self.str_log2))
 
