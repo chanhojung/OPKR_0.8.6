@@ -92,7 +92,7 @@ class SpdctrlLong(SpdController):
             d_delta = 0
             lead_objspd = 0
  
-        if CS.driverAcc_time and not self.map_decel_only: #운전자가 가속페달 밟으면 크루즈 설정속도를 현재속도+1로 동기화
+        if CS.driverAcc_time and not self.map_decel_only: #운전자가 가속페달 밟으면 크루즈 설정속도를 현재속도+2로 동기화
             if int(CS.VSetDis) < int(round(CS.clu_Vanz)):
               lead_set_speed = int(round(CS.clu_Vanz)) + 2
               self.seq_step_debug = "운전자가속"
