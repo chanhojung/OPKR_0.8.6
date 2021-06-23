@@ -207,7 +207,7 @@ class LateralPlanner():
 
     self.desire = DESIRES[self.lane_change_direction][self.lane_change_state]
 
-    self.steer_rate_cost = interp(abs(sm['carState'].steeringAngleDeg), [10, 15, 20, 22, 26, 30, 40, 55], [1.4, 0.8, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1])
+    self.steer_rate_cost = interp(abs(sm['carState'].steeringAngleDeg), [10, 15, 20, 22, 26, 30], [1.4, 0.8, 0.6, 0.5, 0.4, 0.3])
     # self.steer_rate_cost = interp(v_ego, [1.0, 8.0, 15.0], [1.0, 0.8, CP.steerRateCost])
 
     # Turn off lanes during lane change
