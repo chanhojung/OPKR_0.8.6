@@ -80,7 +80,7 @@ class LateralPlanner():
     self.t_idxs = np.arange(TRAJECTORY_SIZE)
     self.y_pts = np.zeros(TRAJECTORY_SIZE)
 
-    self.lane_change_adjust = [0.1, 0.5, 1.0, 1.5]
+    self.lane_change_adjust = [0.2, 0.5, 1.0, 1.5]
     self.lane_change_adjust_vel = [8.3, 16, 22, 30]
     self.lane_change_adjust_new = 0.0
 
