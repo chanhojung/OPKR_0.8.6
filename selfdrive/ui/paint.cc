@@ -1102,7 +1102,7 @@ static void draw_navi_button(UIState *s) {
     nvgStroke(s->vg);
     nvgFontSize(s->vg, 45);
     if (s->scene.map_is_running) {
-      NVGcolor fillColor = nvgRGBA(0,0,255,80);
+      NVGcolor fillColor = nvgRGBA(0,160,200,80);
       nvgFillColor(s->vg, fillColor);
       nvgFill(s->vg);
     }
@@ -1122,22 +1122,22 @@ static void draw_laneless_button(UIState *s) {
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
     nvgBeginPath(s->vg);
     nvgRoundedRect(s->vg, btn_x1, btn_y, btn_w, btn_h, 100);
-    nvgStrokeColor(s->vg, nvgRGBA(255,255,255,80));
+    nvgStrokeColor(s->vg, nvgRGBA(0,125,0,80));
     nvgStrokeWidth(s->vg, 6);
     nvgStroke(s->vg);
     nvgFontSize(s->vg, 45);
     if (s->scene.lateralPlan.lanelessModeStatus) {
-      NVGcolor fillColor = nvgRGBA(0,255,0,80);
+      NVGcolor fillColor = nvgRGBA(0,100,255,80);
       nvgFillColor(s->vg, fillColor);
       nvgFill(s->vg);
     }
     nvgFillColor(s->vg, nvgRGBA(255,255,255,200));
     if (s->scene.laneless_mode == 0) {
-      nvgText(s->vg,btn_xc1,btn_yc,"OFF",NULL);
+      nvgText(s->vg,btn_xc1,btn_yc,"Lane",NULL);
     } else if (s->scene.laneless_mode == 1) {
-      nvgText(s->vg,btn_xc1,btn_yc,"ON",NULL);
+      nvgText(s->vg,btn_xc1,btn_yc,"Kale",NULL);
     } else if (s->scene.laneless_mode == 2) {
-      nvgText(s->vg,btn_xc1,btn_yc,"AUTO",NULL);
+      nvgText(s->vg,btn_xc1,btn_yc,"Auto",NULL);
     }
   }
 }
