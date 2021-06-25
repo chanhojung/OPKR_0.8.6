@@ -1146,7 +1146,7 @@ static void draw_laneless_button(UIState *s) {
       nvgFillColor(s->vg, nvgRGBA(255,255,255,200));
       nvgText(s->vg,btn_xc1,btn_yc,"Kale",NULL);
     } else if (s->scene.laneless_mode == 2) {
-      nvgStrokeColor(s->vg, nvgRGBA(0,125,125,255));
+      nvgStrokeColor(s->vg, nvgRGBA(125,0,125,255));
       nvgStrokeWidth(s->vg, 6);
       nvgStroke(s->vg);
       NVGcolor fillColor = nvgRGBA(125,0,125,80);
