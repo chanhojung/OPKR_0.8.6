@@ -1122,23 +1122,32 @@ static void draw_laneless_button(UIState *s) {
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
     nvgBeginPath(s->vg);
     nvgRoundedRect(s->vg, btn_x1, btn_y, btn_w, btn_h, 100);
-    nvgStrokeColor(s->vg, nvgRGBA(0,125,0,150));
+    nvgStrokeColor(s->vg, nvgRGBA(0,0,0,80));
     nvgStrokeWidth(s->vg, 6);
     nvgStroke(s->vg);
     nvgFontSize(s->vg, 45);
 
     if (s->scene.laneless_mode == 0) {
-      NVGcolor fillColor = nvgRGBA(0,125,0,150);
+      nvgStrokeColor(s->vg, nvgRGBA(0,125,0,255));
+      nvgStrokeWidth(s->vg, 6);
+      nvgStroke(s->vg);
+      NVGcolor fillColor = nvgRGBA(0,125,0,80);
       nvgFillColor(s->vg, fillColor);
       nvgFill(s->vg);      
       nvgText(s->vg,btn_xc1,btn_yc,"Lane",NULL);
     } else if (s->scene.laneless_mode == 1) {
-      NVGcolor fillColor = nvgRGBA(0,100,255,150);
+      nvgStrokeColor(s->vg, nvgRGBA(0,100,255,255));
+      nvgStrokeWidth(s->vg, 6);
+      nvgStroke(s->vg);
+      NVGcolor fillColor = nvgRGBA(0,100,255,80);
       nvgFillColor(s->vg, fillColor);
       nvgFill(s->vg);      
       nvgText(s->vg,btn_xc1,btn_yc,"Kale",NULL);
     } else if (s->scene.laneless_mode == 2) {
-      NVGcolor fillColor = nvgRGBA(0,50,100,150);
+      nvgStrokeColor(s->vg, nvgRGBA(0,125,125,255));
+      nvgStrokeWidth(s->vg, 6);
+      nvgStroke(s->vg);
+      NVGcolor fillColor = nvgRGBA(0,125,125,80);
       nvgFillColor(s->vg, fillColor);
       nvgFill(s->vg);
       nvgText(s->vg,btn_xc1,btn_yc,"Auto",NULL);
