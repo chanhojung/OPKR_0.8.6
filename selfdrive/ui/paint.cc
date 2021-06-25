@@ -1133,7 +1133,8 @@ static void draw_laneless_button(UIState *s) {
       nvgStroke(s->vg);
       NVGcolor fillColor = nvgRGBA(0,125,0,80);
       nvgFillColor(s->vg, fillColor);
-      nvgFill(s->vg);      
+      nvgFill(s->vg);     
+      nvgFillColor(s->vg, nvgRGBA(255,255,255,200));       
       nvgText(s->vg,btn_xc1,btn_yc,"Lane",NULL);
     } else if (s->scene.laneless_mode == 1) {
       nvgStrokeColor(s->vg, nvgRGBA(0,100,255,255));
@@ -1142,14 +1143,16 @@ static void draw_laneless_button(UIState *s) {
       NVGcolor fillColor = nvgRGBA(0,100,255,80);
       nvgFillColor(s->vg, fillColor);
       nvgFill(s->vg);      
+      nvgFillColor(s->vg, nvgRGBA(255,255,255,200));
       nvgText(s->vg,btn_xc1,btn_yc,"Kale",NULL);
     } else if (s->scene.laneless_mode == 2) {
       nvgStrokeColor(s->vg, nvgRGBA(0,125,125,255));
       nvgStrokeWidth(s->vg, 6);
       nvgStroke(s->vg);
-      NVGcolor fillColor = nvgRGBA(0,125,125,80);
+      NVGcolor fillColor = nvgRGBA(125,0,125,80);
       nvgFillColor(s->vg, fillColor);
       nvgFill(s->vg);
+      nvgFillColor(s->vg, nvgRGBA(255,255,255,200));
       nvgText(s->vg,btn_xc1,btn_yc,"Auto",NULL);
     }
   }
