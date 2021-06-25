@@ -664,8 +664,8 @@ static void ui_draw_vision_speed(UIState *s) {
 
   NVGcolor val_color = COLOR_WHITE;
 
-  if( scene->brakePress && !s->scene.comma_stock_ui ) val_color = COLOR_RED;
-  else if( scene->brakeLights && !s->scene.comma_stock_ui ) val_color = nvgRGBA(201, 34, 49, 100);
+  if( scene->brakePress && !s->scene.comma_stock_ui ) val_color = nvgRGBA(255, 0, 0, 100);
+  else if( scene->brakeLights && !s->scene.comma_stock_ui ) val_color = nvgRGBA(255, 80, 0, 100);
   nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_BASELINE);
   ui_draw_text(s, s->viz_rect.centerX(), 240, speed_str.c_str(), 96 * 2.5, val_color, "sans-bold");
   ui_draw_text(s, s->viz_rect.centerX(), 320, s->scene.is_metric ? "km/h" : "mph", 36 * 2.5, COLOR_WHITE_ALPHA(200), "sans-regular");
