@@ -588,9 +588,9 @@ class CarController():
         abs(self.curve_speed), abs(self.anglesteer_desire), abs(new_steer), max(self.steerMax, abs(new_steer)), \
         self.steerDeltaUp, self.steerDeltaDown, aq_value)
     else:
-      str_log1 = 'CV={:03.0f} AS={:03.1f} TQ={:03.0f} ST={:03.0f}/{:01.0f}/{:01.0f} AQ={:+04.2f} S={:.0f}/{:.0f}'.format( \
+      str_log1 = 'CV={:03.0f} AS={:03.1f} TQ={:03.0f} ST={:03.0f}/{:01.0f}/{:01.0f} AQ={:+04.2f} S={:.0f}/{:.0f}/{:.0f}'.format( \
         abs(self.curve_speed), abs(self.anglesteer_desire), abs(new_steer), max(self.steerMax, abs(new_steer)), \
-        self.steerDeltaUp, self.steerDeltaDown, aq_value, int(CS.is_highway), CS.safety_sign_check)
+        self.steerDeltaUp, self.steerDeltaDown, aq_value, int(CS.is_highway), int(CS.is_expressway), CS.safety_sign_check)
 
     trace1.printf1('{}  {}'.format(str_log1, self.str_log2))
 
