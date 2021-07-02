@@ -84,19 +84,16 @@ class Planner():
     self.params = Params()
     self.first_loop = True
 
-    self.target_speed_map = 0.0
+    self.target_speed_map = 0
     self.target_speed_map_counter = 0
-    self.target_speed_map_counter_check = False
-    self.target_speed_map_counter1 = 0
-    self.target_speed_map_counter2 = 0
-    self.target_speed_map_counter3 = 0
     self.target_speed_map_dist = 0
     self.target_speed_map_block = False
     self.target_speed_map_sign = False
-    self.map_sign = 0.0
+    self.map_sign = 0
     self.vego = 0
-    self.second = 0.0
+    self.second = 0
     self.map_enabled = False
+    self.sm = messaging.SubMaster(['liveMapData'])
 
   def choose_solution(self, v_cruise_setpoint, enabled):
     if enabled:
@@ -147,71 +144,24 @@ class Planner():
     self.v_acc_start = self.v_acc_next
     self.a_acc_start = self.a_acc_next
 
-    self.second += 0.25
-    if self.second > 1.0:
+    # opkr
+    self.second += 1
+    if self.second > 30:
       self.map_enabled = self.params.get_bool("OpkrMapEnable")
-      self.second = 0.0
-    if self.map_enabled:
+      self.second = 0
+    if self.map_enabled and v_ego > 0.3:
       self.target_speed_map_counter += 1
-      if self.target_speed_map_counter >= (50+self.target_speed_map_counter1) and self.target_speed_map_counter_check == False:
-        self.target_speed_map_counter_check = True
-        os.system("logcat -d -s opkrspdlimit,opkrspd2limit | grep opkrspd | tail -n 1 | awk \'{print $7}\' > /data/params/d/LimitSetSpeedCamera &")
-        os.system("logcat -d -s opkrspddist,opkrspd2dist | grep opkrspd | tail -n 1 | awk \'{print $7}\' > /data/params/d/LimitSetSpeedCameraDist &")
-        os.system("logcat -d -s opkrsigntype,opkrspdsign | grep opkrspd | tail -n 1 | awk \'{print $7}\' > /data/params/d/OpkrMapSign &")
-        self.target_speed_map_counter3 += 1
-        if self.target_speed_map_counter3 > 2:
-          self.target_speed_map_counter3 = 0
-          os.system("logcat -c &")
-      elif self.target_speed_map_counter >= (75+self.target_speed_map_counter1):
-        self.target_speed_map_counter1 = 0
-        self.target_speed_map_counter = 0
-        self.target_speed_map_counter_check = False
+      if self.target_speed_map_counter >= 75:
+        self.sm.update(0)
         try:
-          mapspeed = self.params.get("LimitSetSpeedCamera", encoding="utf8")
-          mapspeeddist = self.params.get("LimitSetSpeedCameraDist", encoding="utf8")
-          mapsign = self.params.get("OpkrMapSign", encoding="utf8")
-          if mapsign is not None:
-            try:
-              mapsign = int(float(mapsign.rstrip('\n')))
-              self.map_sign = mapsign
-            except:
-              pass
+          self.target_speed_map = float(self.sm['liveMapData'].speedLimit) if float(self.sm['liveMapData'].speedLimit) > 29 else 0
+          if self.target_speed_map > 29:
+            self.target_speed_map_dist = float(self.sm['liveMapData'].speedLimitDistance)
+            if self.target_speed_map_dist > 1001:
+              self.target_speed_map_block = True
           else:
-            mapsign = 0
-            self.map_sign = mapsign
-          if mapspeed is not None and mapspeeddist is not None:
-            try:
-              mapspeed = int(float(mapspeed.rstrip('\n')))
-              mapspeeddist = int(float(mapspeeddist.rstrip('\n')))
-            except:
-              pass
-            if mapspeed > 29:
-              self.target_speed_map = mapspeed
-              self.target_speed_map_dist = mapspeeddist
-              if self.target_speed_map_dist > 1001:
-                self.target_speed_map_block = True
-              self.target_speed_map_counter1 = 80
-              os.system("logcat -c &")
-            else:
-              self.target_speed_map = 0
-              self.target_speed_map_dist = 0
-              self.target_speed_map_block = False
-          elif mapspeed is None and mapspeeddist is None and self.target_speed_map_counter2 < 2:
-            self.target_speed_map_counter2 += 1
-            self.target_speed_map_counter = 51
-            self.target_speed_map = 0
-            self.target_speed_map_dist = 0
-            self.target_speed_map_counter_check = True
             self.target_speed_map_block = False
-            self.target_speed_map_sign = False
-          else:
-            self.target_speed_map_counter = 49
-            self.target_speed_map_counter2 = 0
-            self.target_speed_map = 0
-            self.target_speed_map_dist = 0
-            self.target_speed_map_counter_check = False
-            self.target_speed_map_block = False
-            self.target_speed_map_sign = False
+          self.map_sign = float(self.sm['liveMapData'].safetySign)
         except:
           pass
 
