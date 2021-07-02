@@ -25,6 +25,7 @@ int main() {
   setpriority(PRIO_PROCESS, 0, -15);
 
   int     nTime = 0;
+  int     oTime = 0;
   int     oValue = 0;
 
   ExitHandler do_exit;
@@ -74,13 +75,6 @@ int main() {
    //  opkrspdlimit, opkrspddist, opkrsigntype, opkrcurvangle
 
       // code based from atom
-      if ( oValue == 0 )
-      {
-        res.speedLimitDistance = 0;
-        res.speedLimit = 0;
-        res.roadCurvature = -1;
-        res.safetySign = 0;
-      }
       if( strcmp( entry.tag, "opkrspddist" ) == 0 )
       {
         oValue = 1;
@@ -91,14 +85,18 @@ int main() {
         oValue = 2;
         res.speedLimit = atoi( entry.message );
       }
-      else if( strcmp( entry.tag, "opkrcurvangle" ) == 0 )
-      {
-        res.roadCurvature = atoi( entry.message );
-      }
       else if( strcmp( entry.tag, "opkrsigntype" ) == 0 )
       {
         oValue = 3;
         res.safetySign = atoi( entry.message );
+      }
+      else if( strcmp( entry.tag, "opkrcurvangle" ) == 0 )
+      {
+        res.roadCurvature = atoi( entry.message );
+      }
+      else
+      {
+        oValue = 0;
       }
 
       MessageBuilder msg;
@@ -107,30 +105,36 @@ int main() {
       {
         framed.setSpeedLimitDistance( res.speedLimitDistance );  // raw_target_speed_map_dist Float32;
         framed.setRoadCurvature( res.roadCurvature ); // road_curvature Float32;
+        oTime = 0;
+        printf("1: spd = %f    spddist = %f    rc = %f    ss = %f\n", res.speedLimit, res.speedLimitDistance, res.roadCurvature, res.safetySign);
+        system("logcat -c &");
       }
       else if ( oValue == 2 )
       {
-        oValue = 0;
         framed.setSpeedLimit( res.speedLimit );  // Float32;
         framed.setRoadCurvature( res.roadCurvature ); // road_curvature Float32;
-        printf("spd = %f    spddist = %f    rc = %f    ss = %f\n", res.speedLimit, res.speedLimitDistance, res.roadCurvature, res.safetySign);
-        system("logcat -c &");
-        util::sleep_for(1500);
+        oTime = 0;
       }
       else if ( oValue == 3 )
       {
-        oValue = 0;
         framed.setSafetySign( res.safetySign ); // map_sign Float32;
         framed.setRoadCurvature( res.roadCurvature ); // road_curvature Float32;
-        system("logcat -c &");
-        util::sleep_for(1500);
-        printf("spd = %f    spddist = %f    rc = %f    ss = %f\n", res.speedLimit, res.speedLimitDistance, res.roadCurvature, res.safetySign);
-      }
-      else if ( oValue == 0 )
-      {
-        printf("spd = %f    spddist = %f    rc = %f    ss = %f\n", res.speedLimit, res.speedLimitDistance, res.roadCurvature, res.safetySign);
+        printf("2: spd = %f    spddist = %f    rc = %f    ss = %f\n", res.speedLimit, res.speedLimitDistance, res.roadCurvature, res.safetySign);
       }
 
+      oTime++;
+      if ( oValue == 0 && oTime > 15 )
+      {
+        oTime = 0;
+        res.speedLimitDistance = 0;
+        res.speedLimit = 0;
+        res.safetySign = 0;
+        framed.setSpeedLimitDistance( res.speedLimitDistance );  // raw_target_speed_map_dist Float32;
+        framed.setSpeedLimit( res.speedLimit );  // Float32;
+        framed.setSafetySign( res.safetySign ); // map_sign Float32;
+        framed.setRoadCurvature( res.roadCurvature ); // road_curvature Float32;
+        printf("0: spd = %f    spddist = %f    rc = %f    ss = %f\n", res.speedLimit, res.speedLimitDistance, res.roadCurvature, res.safetySign); 
+      }
       framed.setMapEnable( res.mapEnable );
       framed.setMapValid( res.mapValid );
       
