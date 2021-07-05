@@ -404,31 +404,12 @@ static void ui_draw_debug(UIState *s)
     ui_print(s, ui_viz_rx, ui_viz_ry+400, "AD:%.2f", scene.lateralPlan.steerActuatorDelay);
     ui_print(s, ui_viz_rx, ui_viz_ry+450, "SC:%.2f", scene.lateralPlan.steerRateCost);
     ui_print(s, ui_viz_rx, ui_viz_ry+500, "OS:%.2f", abs(scene.output_scale));
-    ui_print(s, ui_viz_rx, ui_viz_ry+550, "Prob:");
-    ui_print(s, ui_viz_rx, ui_viz_ry+600, "%.2f|%.2f", scene.lateralPlan.lProb, scene.lateralPlan.rProb);
-    if (s->scene.longitudinal_control) {
-      if (scene.long_plan_source == 0) {
-        ui_print(s, ui_viz_rx, ui_viz_ry+650, "LP:none");
-      } else if (scene.long_plan_source == 1) {
-        ui_print(s, ui_viz_rx, ui_viz_ry+650, "LP:cruise");
-      } else if (scene.long_plan_source == 2) {
-        ui_print(s, ui_viz_rx, ui_viz_ry+650, "LP:mpc1");
-      } else if (scene.long_plan_source == 3) {
-        ui_print(s, ui_viz_rx, ui_viz_ry+650, "LP:mpc2");
-      } else if (scene.long_plan_source == 4) {
-        ui_print(s, ui_viz_rx, ui_viz_ry+650, "LP:mpc3");
-      } else if (scene.long_plan_source == 5) {
-        ui_print(s, ui_viz_rx, ui_viz_ry+650, "LP:model");
-      }
-      if (s->scene.map_is_running) {
-        ui_print(s, ui_viz_rx, ui_viz_ry+700, "MS:%.0f", scene.mapSign);
-        ui_print(s, ui_viz_rx, ui_viz_ry+750, "RC:%.0f", scene.liveMapData.opkrcurveangle);
-      }
-    } else {
-      if (s->scene.map_is_running) {
-        ui_print(s, ui_viz_rx, ui_viz_ry+650, "MS:%.0f", scene.mapSign);
-        ui_print(s, ui_viz_rx, ui_viz_ry+700, "RC:%.0f", scene.liveMapData.opkrcurveangle);
-      }
+    ui_print(s, ui_viz_rx, ui_viz_ry+550, "%.2f|%.2f", scene.lateralPlan.lProb, scene.lateralPlan.rProb);
+    if (s->scene.map_is_running) {
+      if (s->scene.mapSign) ui_print(s, ui_viz_rx, ui_viz_ry+600, "S:%.0f", scene.mapSign);
+      if (s->scene.limitSpeedCameraDist) ui_print(s, ui_viz_rx, ui_viz_ry+650, "D:%.0f", scene.limitSpeedCameraDist);
+      if (s->scene.liveMapData.opkrturninfo) ui_print(s, ui_viz_rx, ui_viz_ry+700, "T:%.0f", scene.liveMapData.opkrturninfo);
+      if (s->scene.liveMapData.opkrdisttoturn) ui_print(s, ui_viz_rx, ui_viz_ry+750, "D:%.0f", scene.liveMapData.opkrdisttoturn);
     }
     nvgFontSize(s->vg, 40);
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
@@ -708,7 +689,7 @@ static void ui_draw_vision_event(UIState *s) {
     else if (s->scene.limitSpeedCamera < 110) {ui_draw_image(s, {img_speedlimit_x, img_speedlimit_y, img_speedlimit_size, img_speedlimit_size}, "speed_100", img_speedlimit_alpha);}
     else if (s->scene.limitSpeedCamera < 120) {ui_draw_image(s, {img_speedlimit_x, img_speedlimit_y, img_speedlimit_size, img_speedlimit_size}, "speed_110", img_speedlimit_alpha);}
   }
-  if (s->scene.limitSpeedCamera == 0 && s->scene.limitSpeedCameraDist != 0 && !s->scene.comma_stock_ui) {
+  if ((s->scene.mapSign == 195 || s->scene.mapSign == 197) && s->scene.limitSpeedCamera == 0 && s->scene.limitSpeedCameraDist != 0 && !s->scene.comma_stock_ui) {
     {ui_draw_image(s, {s->viz_rect.centerX() - 500/2, s->viz_rect.centerY() - 500/2, 500, 500}, "speed_var", 0.25f);}
   }
   
