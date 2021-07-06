@@ -133,7 +133,6 @@ typedef struct UIScene {
   float angleSteers;
   float steerRatio;
   bool brakeLights;
-  float angleSteersDes;
   float curvature;
   bool steerOverride;
   float output_scale; 
@@ -169,6 +168,7 @@ typedef struct UIScene {
   bool is_OpenpilotViewEnabled;
   bool driving_record;
   bool move_to_background;
+  float steer_actuator_delay;
 
   cereal::DeviceState::Reader deviceState;
   cereal::RadarState::LeadData::Reader lead_data[2];
@@ -229,7 +229,6 @@ typedef struct UIScene {
 
     float angleOffset;
     bool lanelessModeStatus;
-    float steerActuatorDelay;
   } lateralPlan;
 
   struct _LiveMapData

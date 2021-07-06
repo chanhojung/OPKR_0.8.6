@@ -160,7 +160,6 @@ static void update_state(UIState *s) {
     } else if (scene.lateralControlMethod == 2) {
       scene.output_scale = scene.controls_state.getLateralControlState().getLqrState().getOutput();
     }
-    scene.angleSteersDes = scene.controls_state.getSteeringAngleDesiredDeg();
 
     scene.alertTextMsg1 = scene.controls_state.getAlertTextMsg1(); //debug1
     scene.alertTextMsg2 = scene.controls_state.getAlertTextMsg2(); //debug2
@@ -262,6 +261,7 @@ static void update_state(UIState *s) {
   if (sm.updated("carParams")) {
     scene.longitudinal_control = sm["carParams"].getCarParams().getOpenpilotLongitudinalControl();
     scene.steerMax_V = sm["carParams"].getCarParams().getSteerMaxV()[0];
+    scene.steer_actuator_delay = sm["carParams"].getCarParams().getSteerActuatorDelay();
   }
   if (sm.updated("sensorEvents")) {
     for (auto sensor : sm["sensorEvents"].getSensorEvents()) {
@@ -303,7 +303,6 @@ static void update_state(UIState *s) {
     scene.lateralPlan.steerRateCost = data.getSteerRateCost();
     scene.lateralPlan.standstillElapsedTime = data.getStandstillElapsedTime();
     scene.lateralPlan.lanelessModeStatus = data.getLanelessMode();
-    scene.lateralPlan.steerActuatorDelay = data.getSteerActuatorDelay();
   }
   // opkr
   if (sm.updated("liveMapData")) {

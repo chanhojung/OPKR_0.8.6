@@ -401,7 +401,7 @@ static void ui_draw_debug(UIState *s)
     ui_print(s, ui_viz_rx, ui_viz_ry+300, "AA:%.2f", scene.liveParams.angleOffsetAverage);
     ui_print(s, ui_viz_rx, ui_viz_ry+350, "SF:%.2f", scene.liveParams.stiffnessFactor);
 
-    ui_print(s, ui_viz_rx, ui_viz_ry+400, "AD:%.2f", scene.lateralPlan.steerActuatorDelay);
+    ui_print(s, ui_viz_rx, ui_viz_ry+400, "AD:%.2f", scene.steer_actuator_delay);
     ui_print(s, ui_viz_rx, ui_viz_ry+450, "SC:%.2f", scene.lateralPlan.steerRateCost);
     ui_print(s, ui_viz_rx, ui_viz_ry+500, "OS:%.2f", abs(scene.output_scale));
     ui_print(s, ui_viz_rx, ui_viz_ry+550, "%.2f|%.2f", scene.lateralPlan.lProb, scene.lateralPlan.rProb);
@@ -969,37 +969,6 @@ static void bb_ui_draw_measures_right(UIState *s, int bb_x, int bb_y, int bb_w )
     snprintf(uom_str, sizeof(uom_str), "   °");
 
     bb_h +=bb_ui_draw_measure(s, val_str, uom_str, "현재조향각",
-        bb_rx, bb_ry, bb_uom_dx,
-        val_color, lab_color, uom_color,
-        value_fontSize, label_fontSize, uom_fontSize );
-    bb_ry = bb_y + bb_h;
-  }
-
-  //add desired steering angle
-  if (true) {
-    char val_str[16];
-    char uom_str[6];
-    //std::string desire_val;
-    NVGcolor val_color = COLOR_WHITE_ALPHA(200);
-    if (scene->controls_state.getEnabled()) {
-      //show Orange if more than 30 degrees
-      //show red if  more than 50 degrees
-      if(((int)(s->scene.angleSteersDes) < -30) || ((int)(scene->angleSteersDes) > 30)) {
-        val_color = COLOR_WHITE_ALPHA(200);
-      }
-      if(((int)(s->scene.angleSteersDes) < -50) || ((int)(scene->angleSteersDes) > 50)) {
-        val_color = COLOR_WHITE_ALPHA(200);
-      }
-      // steering is in degrees
-      snprintf(val_str, sizeof(val_str), "%.1f°",(s->scene.angleSteersDes));
-      //desire_val = std::to_string(int(s->scene.angleSteersDes*10)/10) + "°";
-    } else {
-      snprintf(val_str, sizeof(val_str), "-");
-      //desire_val = "-";
-    }
-    snprintf(uom_str, sizeof(uom_str), "   °");
-
-    bb_h +=bb_ui_draw_measure(s, val_str, uom_str, "필요조향각",
         bb_rx, bb_ry, bb_uom_dx,
         val_color, lab_color, uom_color,
         value_fontSize, label_fontSize, uom_fontSize );
