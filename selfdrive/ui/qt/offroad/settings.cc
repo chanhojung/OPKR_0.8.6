@@ -4,7 +4,8 @@
 #include <string>
 
 #include <QDebug>
-#include <QProcess>
+#include <QProcess> // opkr
+#include <QDateTime> // opkr
 
 #ifndef QCOM
 #include "selfdrive/ui/qt/offroad/networking.h"
@@ -327,13 +328,14 @@ SoftwarePanel::SoftwarePanel(QWidget* parent) : QWidget(parent) {
       fs_watch->addPath(paramsPath + "/d/LastUpdateTime");
       fs_watch->addPath(paramsPath + "/d/UpdateFailedCount");
     }
+    //params.put("LastUpdateTime", QDateTime::currentDateTime().toString(Qt::ISODate));
     std::system("/data/openpilot/gitcommit.sh");
-    QTimer::singleShot(2000, []() {
+    QTimer::singleShot(500, []() {
       QString desc = "";
       QString commit_local = QString::fromStdString(Params().get("GitCommit").substr(0, 10));
       QString commit_remote = QString::fromStdString(Params().get("GitCommitRemote").substr(0, 10));
       QString empty = "";
-      desc += QString("로  컬: %1\n리모트: %2%3%4\n").arg(commit_local, commit_remote, empty, empty);
+      desc += QString("로    컬: %1\n리모트: %2%3%4\n").arg(commit_local, commit_remote, empty, empty);
       if (commit_local == commit_remote) {
         desc += QString("로컬과 리모트가 일치합니다. 업데이트가 필요 없습니다.");
       } else {
@@ -630,6 +632,11 @@ QWidget * tuning_panel(QWidget * parent) {
     layout->addWidget(new LqrKi());
     layout->addWidget(new DcGain());
   }
+
+  layout->addWidget(horizontal_line());
+
+  layout->addWidget(new LabelControl("롱컨트롤메뉴", ""));
+  layout->addWidget(new CruiseGapTR());
 
   layout->addStretch(1);
 
