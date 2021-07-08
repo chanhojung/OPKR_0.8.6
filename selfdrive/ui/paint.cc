@@ -512,12 +512,12 @@ static void ui_draw_vision_scc_gap(UIState *s) {
   // nvgFill(s->vg);
   // NVGcolor textColor = nvgRGBA(255, 255, 255, 200);
   // float textSize = 30.f;
-
+  // char str[64];
+  
   float lead_car_dist_img_alpha = gap > 0 ? 1.0f : 0.15f;
   float lead_car_dist_bg_alpha = gap > 0 ? 0.3f : 0.1f;
   NVGcolor lead_car_dist_bg = nvgRGBA(0, 0, 0, (255 * lead_car_dist_bg_alpha));
 
-  char str[64];
   if(gap <= 0) {
     // snprintf(str, sizeof(str), "N/A");
     ui_draw_circle_image(s, center_x, center_y, radius, "lead_car_dist_0", lead_car_dist_bg, lead_car_dist_img_alpha);
