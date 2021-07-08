@@ -493,6 +493,41 @@ static void ui_draw_vision_autohold(UIState *s) {
         brake_bg, brake_img_alpha);
 }
 
+static void ui_draw_vision_scc_gap(UIState *s) {
+  //const UIScene *scene = &s->scene;
+  auto car_state = (*s->sm)["carState"].getCarState();
+  //auto scc_smoother = s->scene.car_control.getSccSmoother();
+  int gap = car_state.getCruiseGapSet();
+  //bool longControl = scc_smoother.getLongControl();
+  //int autoTrGap = scc_smoother.getAutoTrGap();
+
+  const int radius = 85;
+  const int center_x = s->viz_rect.x + radius + (radius*2 + 20) * 4;
+  const int center_y = s->viz_rect.bottom() - footer_h + ((footer_h - radius) / 2);
+
+  NVGcolor color_bg = nvgRGBA(0, 0, 0, (255 * 0.1f));
+
+  nvgBeginPath(s->vg);
+  nvgCircle(s->vg, center_x, center_y, radius);
+  nvgFillColor(s->vg, color_bg);
+  nvgFill(s->vg);
+  NVGcolor textColor = nvgRGBA(255, 255, 255, 200);
+  float textSize = 30.f;
+
+  char str[64];
+  if(gap <= 0) {
+    snprintf(str, sizeof(str), "N/A");
+  }
+  // else if(gap == 2) {
+  //   snprintf(str, sizeof(str), "AUTO");
+  //   textColor = nvgRGBA(120, 255, 120, 200);
+  // }
+  else {
+    snprintf(str, sizeof(str), "%d", (int)gap);
+    textColor = nvgRGBA(120, 255, 120, 200);
+    textSize = 38.f;
+  }
+
 static void ui_draw_vision_maxspeed_org(UIState *s) {
   const int SET_SPEED_NA = 255;
   float maxspeed = s->scene.controls_state.getVCruise();
@@ -1091,43 +1126,6 @@ static void bb_ui_draw_UI(UIState *s) {
   bb_ui_draw_measures_left(s, bb_dmr_x, bb_dmr_y-20, bb_dmr_w);
 }
 
-static void ui_draw_vision_scc_gap(UIState *s) {
-  //const UIScene *scene = &s->scene;
-  auto car_state = (*s->sm)["carState"].getCarState();
-  //auto scc_smoother = s->scene.car_control.getSccSmoother();
-
-  int gap = car_state.getCruiseGapSet();
-  //bool longControl = scc_smoother.getLongControl();
-  //int autoTrGap = scc_smoother.getAutoTrGap();
-
-  const int radius = 96;
-  const int center_x = s->viz_rect.x + radius + (bdr_s * 2);
-  const int center_y = s->viz_rect.bottom() - footer_h / 2;
-
-  NVGcolor color_bg = nvgRGBA(0, 0, 0, (255 * 0.1f));
-
-  nvgBeginPath(s->vg);
-  nvgCircle(s->vg, center_x, center_y, radius);
-  nvgFillColor(s->vg, color_bg);
-  nvgFill(s->vg);
-
-  NVGcolor textColor = nvgRGBA(255, 255, 255, 200);
-  float textSize = 30.f;
-
-  char str[64];
-  if(gap <= 0) {
-    snprintf(str, sizeof(str), "N/A");
-  }
-  // else if(gap == 2) {
-  //   snprintf(str, sizeof(str), "AUTO");
-  //   textColor = nvgRGBA(120, 255, 120, 200);
-  // }
-  else {
-    snprintf(str, sizeof(str), "%d", (int)gap);
-    textColor = nvgRGBA(120, 255, 120, 200);
-    textSize = 38.f;
-  }
-
   nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
 
   ui_draw_text(s, center_x, center_y-36, "GAP", 22 * 2.5f, nvgRGBA(255, 255, 255, 200), "sans-bold");
@@ -1290,11 +1288,8 @@ static void ui_draw_vision_car(UIState *s) {
 }
 
 static void ui_draw_vision_footer(UIState *s) {
-  //ui_draw_vision_face(s);
+  ui_draw_vision_face(s);
   ui_draw_vision_scc_gap(s);
-  // if (s->scene.model_long && !s->scene.comma_stock_ui) {
-  //   ui_draw_ml_button(s);
-  // }
   #if UI_FEATURE_BRAKE
     ui_draw_vision_brake(s);
   #endif  
