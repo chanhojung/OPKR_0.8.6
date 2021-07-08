@@ -527,6 +527,9 @@ static void ui_draw_vision_scc_gap(UIState *s) {
     textColor = nvgRGBA(120, 255, 120, 200);
     textSize = 38.f;
   }
+  nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
+  ui_draw_text(s, center_x, center_y-36, "GAP", 22 * 2.5f, nvgRGBA(255, 255, 255, 200), "sans-bold");
+  ui_draw_text(s, center_x, center_y+22, str, textSize * 2.5f, textColor, "sans-bold");
 }
 
 static void ui_draw_vision_maxspeed_org(UIState *s) {
@@ -1125,13 +1128,6 @@ static void bb_ui_draw_UI(UIState *s) {
 
   bb_ui_draw_measures_right(s, bb_dml_x, bb_dml_y, bb_dml_w);
   bb_ui_draw_measures_left(s, bb_dmr_x, bb_dmr_y-20, bb_dmr_w);
-}
-
-  nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
-
-  ui_draw_text(s, center_x, center_y-36, "GAP", 22 * 2.5f, nvgRGBA(255, 255, 255, 200), "sans-bold");
-  ui_draw_text(s, center_x, center_y+22, str, textSize * 2.5f, textColor, "sans-bold");
-
 }
 
 static void draw_navi_button(UIState *s) {
