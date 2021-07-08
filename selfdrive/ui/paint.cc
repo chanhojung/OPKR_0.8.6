@@ -527,6 +527,7 @@ static void ui_draw_vision_scc_gap(UIState *s) {
     textColor = nvgRGBA(120, 255, 120, 200);
     textSize = 38.f;
   }
+}
 
 static void ui_draw_vision_maxspeed_org(UIState *s) {
   const int SET_SPEED_NA = 255;
