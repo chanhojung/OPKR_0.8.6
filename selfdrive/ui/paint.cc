@@ -505,31 +505,45 @@ static void ui_draw_vision_scc_gap(UIState *s) {
   const int center_x = s->viz_rect.x + radius + (radius*2 + 20) * 4.5;
   const int center_y = s->viz_rect.bottom() - footer_h + ((footer_h - radius) / 2);
 
-  NVGcolor color_bg = nvgRGBA(0, 0, 0, (255 * 0.1f));
+  // NVGcolor color_bg = nvgRGBA(0, 0, 0, (255 * 0.1f));
+  // nvgBeginPath(s->vg);
+  // nvgCircle(s->vg, center_x, center_y, radius);
+  // nvgFillColor(s->vg, color_bg);
+  // nvgFill(s->vg);
+  // NVGcolor textColor = nvgRGBA(255, 255, 255, 200);
+  // float textSize = 30.f;
 
-  nvgBeginPath(s->vg);
-  nvgCircle(s->vg, center_x, center_y, radius);
-  nvgFillColor(s->vg, color_bg);
-  nvgFill(s->vg);
-  NVGcolor textColor = nvgRGBA(255, 255, 255, 200);
-  float textSize = 30.f;
+  float lead_car_dist_img_alpha = gap > 0 ? 1.0f : 0.15f;
+  float lead_car_dist_bg_alpha = gap > 0 ? 0.3f : 0.1f;
+  NVGcolor lead_car_dist_bg = nvgRGBA(0, 0, 0, (255 * lead_car_dist_bg_alpha));
 
   char str[64];
   if(gap <= 0) {
-    snprintf(str, sizeof(str), "N/A");
+    // snprintf(str, sizeof(str), "N/A");
+    ui_draw_circle_image(s, center_x, center_y, radius, "lead_car_dist_0", lead_car_dist_bg, lead_car_dist_img_alpha);
+  } else if (gap == 1) {
+    ui_draw_circle_image(s, center_x, center_y, radius, "lead_car_dist_1", lead_car_dist_bg, lead_car_dist_img_alpha); 
+  } else if (gap == 2) {
+    ui_draw_circle_image(s, center_x, center_y, radius, "lead_car_dist_2", lead_car_dist_bg, lead_car_dist_img_alpha); 
+  } else if (gap == 3) {
+    ui_draw_circle_image(s, center_x, center_y, radius, "lead_car_dist_3", lead_car_dist_bg, lead_car_dist_img_alpha); 
+  } else if (gap == 4) {
+    ui_draw_circle_image(s, center_x, center_y, radius, "lead_car_dist_4", lead_car_dist_bg, lead_car_dist_img_alpha); 
+  } else {
+    ui_draw_circle_image(s, center_x, center_y, radius, "lead_car_dist_0", lead_car_dist_bg, lead_car_dist_img_alpha);    
   }
   // else if(gap == 2) {
   //   snprintf(str, sizeof(str), "AUTO");
   //   textColor = nvgRGBA(120, 255, 120, 200);
   // }
-  else {
-    snprintf(str, sizeof(str), "%d", (int)gap);
-    textColor = nvgRGBA(120, 255, 120, 200);
-    textSize = 30.f;
-  }
-  nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
-  ui_draw_text(s, center_x, center_y-36, "GAP", 22 * 2.5f, nvgRGBA(255, 255, 255, 200), "sans-bold");
-  ui_draw_text(s, center_x, center_y+22, str, textSize * 2.5f, textColor, "sans-bold");
+  // else {
+  //   snprintf(str, sizeof(str), "%d", (int)gap);
+  //   textColor = nvgRGBA(120, 255, 120, 200);
+  //   textSize = 30.f;
+  // }
+  // nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
+  // ui_draw_text(s, center_x, center_y-36, "GAP", 22 * 2.5f, nvgRGBA(255, 255, 255, 200), "sans-bold");
+  // ui_draw_text(s, center_x, center_y+22, str, textSize * 2.5f, textColor, "sans-bold");
 }
 
 static void ui_draw_vision_maxspeed_org(UIState *s) {
@@ -1465,6 +1479,11 @@ void ui_nvg_init(UIState *s) {
 	  {"brake", "../assets/img_brake_disc.png"},      
 	  {"autohold_warning", "../assets/img_autohold_warning.png"},
 	  {"autohold_active", "../assets/img_autohold_active.png"}, 
+    {"lead_car_dist_0", "../assets/car_dist_0.png"},
+    {"lead_car_dist_1", "../assets/car_dist_1.png"},    
+    {"lead_car_dist_2", "../assets/car_dist_2.png"},
+    {"lead_car_dist_3", "../assets/car_dist_3.png"},
+    {"lead_car_dist_4", "../assets/car_dist_4.png"},
   };
   for (auto [name, file] : images) {
     s->images[name] = nvgCreateImage(s->vg, file, 1);
