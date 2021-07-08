@@ -502,7 +502,7 @@ static void ui_draw_vision_scc_gap(UIState *s) {
   //int autoTrGap = scc_smoother.getAutoTrGap();
 
   const int radius = 85;
-  const int center_x = s->viz_rect.x + radius + (radius*2 + 20) * 4;
+  const int center_x = s->viz_rect.x + radius + (radius*2 + 20) * 4.5;
   const int center_y = s->viz_rect.bottom() - footer_h + ((footer_h - radius) / 2);
 
   NVGcolor color_bg = nvgRGBA(0, 0, 0, (255 * 0.1f));
@@ -525,7 +525,7 @@ static void ui_draw_vision_scc_gap(UIState *s) {
   else {
     snprintf(str, sizeof(str), "%d", (int)gap);
     textColor = nvgRGBA(120, 255, 120, 200);
-    textSize = 38.f;
+    textSize = 30.f;
   }
   nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
   ui_draw_text(s, center_x, center_y-36, "GAP", 22 * 2.5f, nvgRGBA(255, 255, 255, 200), "sans-bold");
@@ -1141,7 +1141,7 @@ static void draw_navi_button(UIState *s) {
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
     nvgBeginPath(s->vg);
     nvgRoundedRect(s->vg, btn_x1, btn_y, btn_w, btn_h, 100);
-    nvgStrokeColor(s->vg, nvgRGBA(255,255,255,80));
+    nvgStrokeColor(s->vg, nvgRGBA(0,160,200,255));
     nvgStrokeWidth(s->vg, 6);
     nvgStroke(s->vg);
     nvgFontSize(s->vg, 45);
