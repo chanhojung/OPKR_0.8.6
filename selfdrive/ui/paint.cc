@@ -717,6 +717,7 @@ static void ui_draw_vision_event(UIState *s) {
   const int viz_event_y = s->viz_rect.y + (bdr_s);
 
   // from 목사탕님 & Neokii & ...
+  const int SET_SPEED_NA = 255;  
   float maxspeed = s->scene.controls_state.getVCruise();  
   const bool is_cruise_set = maxspeed != 0 && maxspeed != SET_SPEED_NA && s->scene.controls_state.getEnabled();
   const int center_x = s->viz_rect.x + (bdr_s) + 2 * (184 + 15);
