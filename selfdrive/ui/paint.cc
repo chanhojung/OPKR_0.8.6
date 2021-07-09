@@ -498,15 +498,9 @@ static void ui_draw_vision_scc_gap(UIState *s) {
   int gap = car_state.getCruiseGapSet();
 
   const int radius = 85;
-<<<<<<< Updated upstream
-  const int center_x = s->viz_rect.x + radius + (radius*2 + 20) * 4.5;
-  const int center_y = s->viz_rect.bottom() - (2 * footer_h) + ((footer_h - radius) / 2);
-  
-=======
   const int center_x = s->viz_rect.x + radius + (bdr_s);
   const int center_y = s->viz_rect.bottom() - (2 * footer_h) + ((footer_h - radius) / 2);
 
->>>>>>> Stashed changes
   float lead_car_dist_img_alpha = gap > 0 ? 1.0f : 0.15f;
   float lead_car_dist_bg_alpha = gap > 0 ? 0.3f : 0.1f;
   NVGcolor lead_car_dist_bg = nvgRGBA(0, 0, 0, (255 * lead_car_dist_bg_alpha));
