@@ -602,6 +602,10 @@ static void ui_draw_vision_maxspeed(UIState *s) {
   } else {
     ui_draw_text(s, rect.centerX()+viz_max_o/2, int(s->viz_rect.y + (bdr_s))+165, "-", 42 * 2.3, COLOR_WHITE_ALPHA(100), "sans-semibold");
   }
+
+  const int center_x = s->viz_rect.x + (bdr_s) + 184 + 15;
+  const int center_y = int(s->viz_rect.y + (bdr_s));
+    
   // from 목사탕님 & Neokii & ...
   if (is_cruise_set && s->scene.limitSpeedCamera < 40 && s->scene.limitSpeedCamera != 0 && s->scene.limitSpeedCameraDist != 0) {
     ui_draw_image(s, {center_x, center_y, 180, 180}, "speed_30", 5.0f);
