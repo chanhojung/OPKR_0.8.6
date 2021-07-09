@@ -604,9 +604,9 @@ static void ui_draw_vision_maxspeed(UIState *s) {
   }
 
   // from 목사탕님 & Neokii & ...
-  const int center_x = s->viz_rect.x + (bdr_s) + 184 + 15;
-  const int center_y = int(s->viz_rect.y + (bdr_s));
-    
+  const int center_x = 960; // s->viz_rect.x + (bdr_s) + 184 + 15;
+  const int center_y = 540; // int(s->viz_rect.y + (bdr_s));
+
   if (is_cruise_set && s->scene.limitSpeedCamera < 40 && s->scene.limitSpeedCamera != 0 && s->scene.limitSpeedCameraDist != 0) {
     ui_draw_image(s, {center_x, center_y, 180, 180}, "speed_30", 5.0f);
   } else if (is_cruise_set && s->scene.limitSpeedCamera < 50 && s->scene.limitSpeedCamera != 0 && s->scene.limitSpeedCameraDist != 0) {
@@ -675,7 +675,7 @@ static void ui_draw_vision_cameradist(UIState *s) {    // from 목사탕님 & Ne
   snprintf(str, sizeof(str), "%.1f", (float)cameradistkm);
 
   //int viz_max_o = 184; //offset value to move right
-  const Rect rect = {s->viz_rect.x + (bdr_s) + 184 + 15, int(s->viz_rect.y + (bdr_s)) + 170, 184, 80};
+  const Rect rect = {960 - 92, 540 + 92, 184, 80};//  s->viz_rect.x + (bdr_s) + 184 + 15, int(s->viz_rect.y + (bdr_s)) + 170, 184, 80};
   NVGcolor color = COLOR_WHITE;
 
   if (s->is_speed_over_limit) {
