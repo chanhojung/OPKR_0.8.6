@@ -499,7 +499,7 @@ static void ui_draw_vision_scc_gap(UIState *s) {
 
   const int radius = 85;
   const int center_x = s->viz_rect.x + radius + (bdr_s);
-  const int center_y = s->viz_rect.bottom() - 1.5 * footer_h + ((footer_h - radius) / 2);
+  const int center_y = s->viz_rect.bottom() - 1.56 * footer_h + ((footer_h - radius) / 2);
 
   float lead_car_dist_img_alpha = gap > 0 ? 1.0f : 0.15f;
   float lead_car_dist_bg_alpha = gap > 0 ? 0.3f : 0.1f;
@@ -688,7 +688,7 @@ static void ui_draw_vision_speed(UIState *s) {
       nvgLineTo(s->vg, viz_blinker_x - (viz_add*offset) - (viz_blinker_w/2), s->viz_rect.y + (header_h/2.1));
       nvgLineTo(s->vg, viz_blinker_x - (viz_add*offset)                    , s->viz_rect.y + (header_h/1.4));
       nvgClosePath(s->vg);
-      nvgFillColor(s->vg, nvgRGBA(255,100,0,(scene->blinker_blinkingrate<=65 && scene->blinker_blinkingrate>=23)?70:0));
+      nvgFillColor(s->vg, nvgRGBA(255,100,0,(scene->blinker_blinkingrate<=65 && scene->blinker_blinkingrate>=23)?200:0));
       nvgFill(s->vg);
     }
     if(s->scene.rightBlinker) {
@@ -697,7 +697,7 @@ static void ui_draw_vision_speed(UIState *s) {
       nvgLineTo(s->vg, viz_blinker_x + (viz_add*offset) + (viz_blinker_w*1.5), s->viz_rect.y + (header_h/2.1));
       nvgLineTo(s->vg, viz_blinker_x + (viz_add*offset) + viz_blinker_w      , s->viz_rect.y + (header_h/1.4));
       nvgClosePath(s->vg);
-      nvgFillColor(s->vg, nvgRGBA(255,100,0,(scene->blinker_blinkingrate<=65 && scene->blinker_blinkingrate>=23)?70:0));
+      nvgFillColor(s->vg, nvgRGBA(255,100,0,(scene->blinker_blinkingrate<=65 && scene->blinker_blinkingrate>=23)?200:0));
       nvgFill(s->vg);
     }    
   }
