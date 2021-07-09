@@ -494,25 +494,12 @@ static void ui_draw_vision_autohold(UIState *s) {
 }
 
 static void ui_draw_vision_scc_gap(UIState *s) {
-  //const UIScene *scene = &s->scene;
   auto car_state = (*s->sm)["carState"].getCarState();
-  //auto scc_smoother = s->scene.car_control.getSccSmoother();
   int gap = car_state.getCruiseGapSet();
-  //bool longControl = scc_smoother.getLongControl();
-  //int autoTrGap = scc_smoother.getAutoTrGap();
 
   const int radius = 85;
   const int center_x = s->viz_rect.x + radius + (radius*2 + 20) * 4.5;
-  const int center_y = s->viz_rect.bottom() - footer_h + ((footer_h - radius) / 2);
-
-  // NVGcolor color_bg = nvgRGBA(0, 0, 0, (255 * 0.1f));
-  // nvgBeginPath(s->vg);
-  // nvgCircle(s->vg, center_x, center_y, radius);
-  // nvgFillColor(s->vg, color_bg);
-  // nvgFill(s->vg);
-  // NVGcolor textColor = nvgRGBA(255, 255, 255, 200);
-  // float textSize = 30.f;
-  // char str[64];
+  const int center_y = s->viz_rect.bottom() - (2 * footer_h) + ((footer_h - radius) / 2);
   
   float lead_car_dist_img_alpha = gap > 0 ? 1.0f : 0.15f;
   float lead_car_dist_bg_alpha = gap > 0 ? 0.3f : 0.1f;
@@ -532,18 +519,6 @@ static void ui_draw_vision_scc_gap(UIState *s) {
   } else {
     ui_draw_circle_image(s, center_x, center_y, radius, "lead_car_dist_0", lead_car_dist_bg, lead_car_dist_img_alpha);    
   }
-  // else if(gap == 2) {
-  //   snprintf(str, sizeof(str), "AUTO");
-  //   textColor = nvgRGBA(120, 255, 120, 200);
-  // }
-  // else {
-  //   snprintf(str, sizeof(str), "%d", (int)gap);
-  //   textColor = nvgRGBA(120, 255, 120, 200);
-  //   textSize = 30.f;
-  // }
-  // nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
-  // ui_draw_text(s, center_x, center_y-36, "GAP", 22 * 2.5f, nvgRGBA(255, 255, 255, 200), "sans-bold");
-  // ui_draw_text(s, center_x, center_y+22, str, textSize * 2.5f, textColor, "sans-bold");
 }
 
 static void ui_draw_vision_maxspeed_org(UIState *s) {
@@ -602,30 +577,6 @@ static void ui_draw_vision_maxspeed(UIState *s) {
   } else {
     ui_draw_text(s, rect.centerX()+viz_max_o/2, int(s->viz_rect.y + (bdr_s))+165, "-", 42 * 2.3, COLOR_WHITE_ALPHA(100), "sans-semibold");
   }
-
-  // from 목사탕님 & Neokii & ...
-  const int center_x = 960; // s->viz_rect.x + (bdr_s) + 184 + 15;
-  const int center_y = 540; // int(s->viz_rect.y + (bdr_s));
-
-  if (is_cruise_set && s->scene.limitSpeedCamera < 40 && s->scene.limitSpeedCamera != 0 && s->scene.limitSpeedCameraDist != 0) {
-    ui_draw_image(s, {center_x, center_y, 180, 180}, "speed_30", 5.0f);
-  } else if (is_cruise_set && s->scene.limitSpeedCamera < 50 && s->scene.limitSpeedCamera != 0 && s->scene.limitSpeedCameraDist != 0) {
-    ui_draw_image(s, {center_x, center_y, 180, 180}, "speed_40", 5.0f);
-  } else if (is_cruise_set && s->scene.limitSpeedCamera < 60 && s->scene.limitSpeedCamera != 0 && s->scene.limitSpeedCameraDist != 0) {
-    ui_draw_image(s, {center_x, center_y, 180, 180}, "speed_50", 5.0f);
-  } else if (is_cruise_set && s->scene.limitSpeedCamera < 70 && s->scene.limitSpeedCamera != 0 && s->scene.limitSpeedCameraDist != 0) {
-    ui_draw_image(s, {center_x, center_y, 180, 180}, "speed_60", 5.0f);
-  } else if (is_cruise_set && s->scene.limitSpeedCamera < 80 && s->scene.limitSpeedCamera != 0 && s->scene.limitSpeedCameraDist != 0) {
-    ui_draw_image(s, {center_x, center_y, 180, 180}, "speed_70", 5.0f);
-  } else if (is_cruise_set && s->scene.limitSpeedCamera < 90 && s->scene.limitSpeedCamera != 0 && s->scene.limitSpeedCameraDist != 0) {
-    ui_draw_image(s, {center_x, center_y, 180, 180}, "speed_80", 5.0f);
-  } else if (is_cruise_set && s->scene.limitSpeedCamera < 100 && s->scene.limitSpeedCamera != 0 && s->scene.limitSpeedCameraDist != 0) {
-    ui_draw_image(s, {center_x, center_y, 180, 180}, "speed_90", 5.0f);
-  } else if (is_cruise_set && s->scene.limitSpeedCamera < 110 && s->scene.limitSpeedCamera != 0 && s->scene.limitSpeedCameraDist != 0) {
-    ui_draw_image(s, {center_x, center_y, 180, 180}, "speed_100", 5.0f);
-  } else if (is_cruise_set && s->scene.limitSpeedCamera < 120 && s->scene.limitSpeedCamera != 0  && s->scene.limitSpeedCameraDist != 0) {
-    ui_draw_image(s, {center_x, center_y, 180, 180}, "speed_110", 5.0f);
-  }
 }
 
 static void ui_draw_vision_cruise_speed(UIState *s) {
@@ -674,8 +625,7 @@ static void ui_draw_vision_cameradist(UIState *s) {    // from 목사탕님 & Ne
   char str[64];
   snprintf(str, sizeof(str), "%.1f", (float)cameradistkm);
 
-  //int viz_max_o = 184; //offset value to move right
-  const Rect rect = {960 - 92, 540 + 92, 184, 80};//  s->viz_rect.x + (bdr_s) + 184 + 15, int(s->viz_rect.y + (bdr_s)) + 170, 184, 80};
+  const Rect rect = {s->viz_rect.x + (bdr_s) + 2 * (184 + 15), int(s->viz_rect.y + (bdr_s)), 184, 80};   
   NVGcolor color = COLOR_WHITE;
 
   if (s->is_speed_over_limit) {
@@ -767,6 +717,31 @@ static void ui_draw_vision_event(UIState *s) {
   const int viz_event_x = s->viz_rect.right() - (viz_event_w + bdr_s);
   const int viz_event_y = s->viz_rect.y + (bdr_s);
 
+  // from 목사탕님 & Neokii & ...
+  const bool is_cruise_set = maxspeed != 0 && maxspeed != SET_SPEED_NA && s->scene.controls_state.getEnabled();
+  const int center_x = s->viz_rect.x + (bdr_s) + 2 * (184 + 15);
+  const int center_y = int(s->viz_rect.y + (bdr_s) + 80 + 180);
+
+  if (is_cruise_set && s->scene.limitSpeedCamera < 40 && s->scene.limitSpeedCamera != 0 && s->scene.limitSpeedCameraDist != 0) {
+    ui_draw_image(s, {center_x, center_y, 180, 180}, "speed_30", 5.0f);
+    ui_draw_image(s, {960, 540, 480, 480}, "speed_S30", 5.0f); //스쿨존 이미지
+  } else if (is_cruise_set && s->scene.limitSpeedCamera < 50 && s->scene.limitSpeedCamera != 0 && s->scene.limitSpeedCameraDist != 0) {
+    ui_draw_image(s, {center_x, center_y, 180, 180}, "speed_40", 5.0f);
+  } else if (is_cruise_set && s->scene.limitSpeedCamera < 60 && s->scene.limitSpeedCamera != 0 && s->scene.limitSpeedCameraDist != 0) {
+    ui_draw_image(s, {center_x, center_y, 180, 180}, "speed_50", 5.0f);
+  } else if (is_cruise_set && s->scene.limitSpeedCamera < 70 && s->scene.limitSpeedCamera != 0 && s->scene.limitSpeedCameraDist != 0) {
+    ui_draw_image(s, {center_x, center_y, 180, 180}, "speed_60", 5.0f);
+  } else if (is_cruise_set && s->scene.limitSpeedCamera < 80 && s->scene.limitSpeedCamera != 0 && s->scene.limitSpeedCameraDist != 0) {
+    ui_draw_image(s, {center_x, center_y, 180, 180}, "speed_70", 5.0f);
+  } else if (is_cruise_set && s->scene.limitSpeedCamera < 90 && s->scene.limitSpeedCamera != 0 && s->scene.limitSpeedCameraDist != 0) {
+    ui_draw_image(s, {center_x, center_y, 180, 180}, "speed_80", 5.0f);
+  } else if (is_cruise_set && s->scene.limitSpeedCamera < 100 && s->scene.limitSpeedCamera != 0 && s->scene.limitSpeedCameraDist != 0) {
+    ui_draw_image(s, {center_x, center_y, 180, 180}, "speed_90", 5.0f);
+  } else if (is_cruise_set && s->scene.limitSpeedCamera < 110 && s->scene.limitSpeedCamera != 0 && s->scene.limitSpeedCameraDist != 0) {
+    ui_draw_image(s, {center_x, center_y, 180, 180}, "speed_100", 5.0f);
+  } else if (is_cruise_set && s->scene.limitSpeedCamera < 120 && s->scene.limitSpeedCamera != 0  && s->scene.limitSpeedCameraDist != 0) {
+    ui_draw_image(s, {center_x, center_y, 180, 180}, "speed_110", 5.0f);
+  }
   // if (s->scene.limitSpeedCamera > 29 && !s->scene.comma_stock_ui) {
   //   int img_speedlimit_growing_size_init = 0;
   //   int img_speedlimit_growing_size = 0;
@@ -1437,6 +1412,7 @@ void ui_nvg_init(UIState *s) {
   std::vector<std::pair<const char *, const char *>> images = {
     {"wheel", "../assets/img_chffr_wheel.png"},
     {"driver_face", "../assets/img_driver_face.png"},
+    {"speed_S30", "../assets/img_S30_speedahead.png"},    
     {"speed_30", "../assets/img_30_speedahead.png"},
     {"speed_40", "../assets/img_40_speedahead.png"},
     {"speed_50", "../assets/img_50_speedahead.png"},
