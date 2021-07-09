@@ -480,12 +480,12 @@ static void ui_draw_vision_scc_gap(UIState *s) {
   // float lead_car_dist_bg_alpha = gap > 0 ? 0.3f : 0.1f;
   // NVGcolor lead_car_dist_bg = nvgRGBA(0, 0, 0, (255 * lead_car_dist_bg_alpha));
   
-  if(gap <= 0) {ui_draw_image(s, center_x, center_y, 195, 195, "lead_car_dist_0", 0.9f);}
-  else if (gap == 1) {ui_draw_image(s, center_x, center_y, 195, 195, "lead_car_dist_1", 0.9f);}
-  else if (gap == 2) {ui_draw_image(s, center_x, center_y, 195, 195, "lead_car_dist_2", 0.9f);}
-  else if (gap == 3) {ui_draw_image(s, center_x, center_y, 195, 195, "lead_car_dist_3", 0.9f);}
-  else if (gap == 4) {ui_draw_image(s, center_x, center_y, 195, 195, "lead_car_dist_4", 0.9f);}
-  else {ui_draw_image(s, center_x, center_y, 195, 195, "lead_car_dist_0", 0.9f);}
+  if(gap <= 0) {ui_draw_image(s, {center_x, center_y, 195, 195}, "lead_car_dist_0", 0.9f);}
+  else if (gap == 1) {ui_draw_image(s, {center_x, center_y, 195, 195}, "lead_car_dist_1", 0.9f);}
+  else if (gap == 2) {ui_draw_image(s, {center_x, center_y, 195, 195}, "lead_car_dist_2", 0.9f);}
+  else if (gap == 3) {ui_draw_image(s, {center_x, center_y, 195, 195}, "lead_car_dist_3", 0.9f);}
+  else if (gap == 4) {ui_draw_image(s, {center_x, center_y, 195, 195}, "lead_car_dist_4", 0.9f);}
+  else {ui_draw_image(s, {center_x, center_y, 195, 195}, "lead_car_dist_0", 0.9f);}
 }
 
 static void ui_draw_vision_brake(UIState *s) {
