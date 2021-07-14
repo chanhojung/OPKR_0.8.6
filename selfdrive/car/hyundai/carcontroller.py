@@ -401,7 +401,7 @@ class CarController():
 
 
     # 차간거리 속도 연동 변환하기
-    if CS.acc_active and not CS.out.brakePressed:
+    if CS.acc_active : # and not CS.out.gasPressed and not CS.out.brakePressed:
       if (CS.out.vEgo * CV.MS_TO_KPH)+5 < 30 : #GAP_DIST 1칸 만들기
         self.cruise_gap_auto_switch_timer += 1
         if self.cruise_gap_auto_switch_timer > 10 and CS.cruiseGapSet != 1.0 :
