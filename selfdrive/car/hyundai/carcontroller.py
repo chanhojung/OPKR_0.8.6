@@ -399,7 +399,6 @@ class CarController():
     if pcm_cancel_cmd and self.longcontrol:
       can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.CANCEL, clu11_speed, CS.CP.sccBus))
 
-    self.cruise_gap_auto_switch_timer = 0
     # 차간거리를 주행속도에 맞춰 변환하기
     if CS.acc_active : # and not CS.out.gasPressed and not CS.out.brakePressed:
       self.cruise_gap_auto_switch_timer += 1
