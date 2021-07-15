@@ -197,7 +197,7 @@ class LateralPlanner():
     if self.lane_change_state in [LaneChangeState.off, LaneChangeState.laneChangeStarting]:
       self.keep_pulse_timer = 0.0
     elif self.lane_change_state == LaneChangeState.preLaneChange:
-      self.keep_pulse_timer += DT_MDL
+      self.keep_pulse_timer += 2 * DT_MDL
       if self.keep_pulse_timer > 1.0:
         self.keep_pulse_timer = 0.0
       elif self.desire in [log.LateralPlan.Desire.keepLeft, log.LateralPlan.Desire.keepRight]:
