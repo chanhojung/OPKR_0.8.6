@@ -519,7 +519,7 @@ class CarController():
         self.v_cruise_kph_auto_res = int(CS.clu_Vanz)
         self.res_speed_timer = 30
       if self.auto_res_timer <= 0:
-        self.auto_res_timer = randint(10, 15)
+        self.auto_res_timer = 20 #randint(15, 20)
     elif self.auto_res_timer > 0 and self.opkr_cruise_auto_res:
       self.auto_res_timer -= 1
 
