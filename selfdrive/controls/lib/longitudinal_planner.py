@@ -126,7 +126,7 @@ class Planner():
       if self.mpcs[key].status and self.mpcs[key].a_solution[5] < next_a:
         self.longitudinalPlanSource = key
         self.v_desired_trajectory = self.mpcs[key].v_solution[:CONTROL_N]
-        self.a_desired_trajectory = self.mpcs[key].a_solution[:CONTROL_N]\
+        self.a_desired_trajectory = self.mpcs[key].a_solution[:CONTROL_N]
         self.j_desired_trajectory = self.mpcs[key].j_solution[:CONTROL_N]          
         next_a = self.mpcs[key].a_solution[5]
 
