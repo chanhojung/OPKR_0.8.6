@@ -58,7 +58,7 @@ class LongitudinalMpc():
 
     self.v_solution = list(self.mpc_solution.v_ego)
     self.a_solution = list(self.mpc_solution.a_ego)
-    self.j_solution = list(self.mpc_solution.j_ego)    
+    self.j_solution = list(self.mpc_solution.j_ego)
 
     # Reset if NaN or goes through lead car
     nans = any(math.isnan(x) for x in self.mpc_solution[0].v_ego)

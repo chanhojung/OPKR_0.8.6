@@ -102,7 +102,7 @@ void Networking::wrongPassword(const QString &ssid) {
 }
 
 void Networking::showEvent(QShowEvent* event) {
-  // Wait to refresh to avoid queuing up too many scans if shown and hidden quickly
+  // Wait to refresh to avoid delay when showing Networking widget
   QTimer::singleShot(300, this, [=]() {
     if (this->isVisible()) {
       wifi->refreshNetworks();
@@ -185,7 +185,6 @@ void WifiUI::refresh() {
     main_layout->addWidget(scanning, 0, Qt::AlignCenter);
     return;
   }
-  
   int i = 0;
   for (Network &network : wifi->seen_networks) {
     QHBoxLayout *hlayout = new QHBoxLayout;
