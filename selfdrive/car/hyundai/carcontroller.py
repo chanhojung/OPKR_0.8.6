@@ -506,7 +506,7 @@ class CarController():
         self.v_cruise_kph_auto_res = 0
         self.res_speed = 0
 
-    if self.model_speed > 95 and self.cancel_counter == 0 and not CS.acc_active and not CS.out.brakeLights and \
+    if self.model_speed > 70 and self.cancel_counter == 0 and not CS.acc_active and not CS.out.brakeLights and \
       int(CS.VSetDis) > 30 and int(CS.clu_Vanz) >= 30 and self.auto_res_timer <= 0 and self.opkr_cruise_auto_res:
     #  (CS.lead_distance < 149 or int(CS.clu_Vanz) > 30) and int(CS.clu_Vanz) >= 3 and self.auto_res_timer <= 0 and self.opkr_cruise_auto_res:
       if self.opkr_cruise_auto_res_option == 0:
