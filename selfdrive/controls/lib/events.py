@@ -376,7 +376,7 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
 
   EventName.stockAeb: {
     ET.PERMANENT: Alert(
-      "브레이크!",
+      "브레이크(AEB)!",
       "순정 AEB: 추돌 위험",
       AlertStatus.critical, AlertSize.full,
       Priority.HIGHEST, VisualAlert.fcw, AudibleAlert.none, 1., 2., 2.),
@@ -385,7 +385,7 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
 
   EventName.stockFcw: {
     ET.PERMANENT: Alert(
-      "브레이크!",
+      "브레이크(FCW)!",
       "순정 FCW: 추돌 위험",
       AlertStatus.critical, AlertSize.full,
       Priority.HIGHEST, VisualAlert.fcw, AudibleAlert.none, 1., 2., 2.),
