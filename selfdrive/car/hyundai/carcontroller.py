@@ -401,33 +401,33 @@ class CarController():
 
     # 차간거리를 주행속도에 맞춰 변환하기
     if CS.acc_active : # and not CS.out.gasPressed and not CS.out.brakePressed:
-      if (CS.out.vEgo * CV.MS_TO_KPH) < 20 : # 시속 20킬로 미만 GAP_DIST 1칸 만들기
+      # if (CS.out.vEgo * CV.MS_TO_KPH) < 20 : # 시속 20킬로 미만 GAP_DIST 1칸 만들기
+      #   self.cruise_gap_auto_switch_timer += 1
+      #   if self.cruise_gap_auto_switch_timer > 20 and CS.cruiseGapSet != 1.0 :
+      #     can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.GAP_DIST)) if not self.longcontrol \
+      #       else can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.GAP_DIST, clu11_speed, CS.CP.sccBus))
+      #     self.cruise_gap_auto_switch_timer = 0
+      #   if CS.cruiseGapSet == 1.0:
+      #     self.cruise_gap_auto_switch_timer = 0
+      # elif (CS.out.vEgo * CV.MS_TO_KPH) < 45 :# 시속 55킬로 미만 GAP_DIST 2칸 만들기
+      #   self.cruise_gap_auto_switch_timer += 1
+      #   if self.cruise_gap_auto_switch_timer > 20 and (CS.cruiseGapSet != 2.0) :
+      #     can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.GAP_DIST)) if not self.longcontrol \
+      #       else can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.GAP_DIST, clu11_speed, CS.CP.sccBus))
+      #     self.cruise_gap_auto_switch_timer = 0
+      #   if CS.cruiseGapSet == 2.0:
+      #     self.cruise_gap_auto_switch_timer = 0          
+      if (CS.out.vEgo * CV.MS_TO_KPH) >= 65 :# 시속 65킬로 이상 GAP_DIST 3칸 만들기
         self.cruise_gap_auto_switch_timer += 1
-        if self.cruise_gap_auto_switch_timer > 20 and CS.cruiseGapSet != 1.0 :
-          can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.GAP_DIST)) if not self.longcontrol \
-            else can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.GAP_DIST, clu11_speed, CS.CP.sccBus))
-          self.cruise_gap_auto_switch_timer = 0
-        if CS.cruiseGapSet == 1.0:
-          self.cruise_gap_auto_switch_timer = 0
-      elif (CS.out.vEgo * CV.MS_TO_KPH) < 45 :# 시속 55킬로 미만 GAP_DIST 2칸 만들기
-        self.cruise_gap_auto_switch_timer += 1
-        if self.cruise_gap_auto_switch_timer > 20 and (CS.cruiseGapSet != 2.0) :
-          can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.GAP_DIST)) if not self.longcontrol \
-            else can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.GAP_DIST, clu11_speed, CS.CP.sccBus))
-          self.cruise_gap_auto_switch_timer = 0
-        if CS.cruiseGapSet == 2.0:
-          self.cruise_gap_auto_switch_timer = 0          
-      elif (CS.out.vEgo * CV.MS_TO_KPH) < 95 :# 시속 105킬로 미만 GAP_DIST 3칸 만들기
-        self.cruise_gap_auto_switch_timer += 1
-        if self.cruise_gap_auto_switch_timer > 20 and (CS.cruiseGapSet != 3.0) :
+        if self.cruise_gap_auto_switch_timer > 25 and (CS.cruiseGapSet != 3.0) :
           can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.GAP_DIST)) if not self.longcontrol \
             else can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.GAP_DIST, clu11_speed, CS.CP.sccBus))
           self.cruise_gap_auto_switch_timer = 0
         if CS.cruiseGapSet == 3.0:
           self.cruise_gap_auto_switch_timer = 0          
-      elif (CS.out.vEgo * CV.MS_TO_KPH) >= 95: # 시속 105킬로 이상 GAP_DIST 4칸 유지
+      elif (CS.out.vEgo * CV.MS_TO_KPH) >= 105: # 시속 105킬로 이상 GAP_DIST 4칸 유지
         self.cruise_gap_auto_switch_timer += 1
-        if self.cruise_gap_auto_switch_timer > 20 and (CS.cruiseGapSet != 4.0) :
+        if self.cruise_gap_auto_switch_timer > 25 and (CS.cruiseGapSet != 4.0) :
           can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.GAP_DIST)) if not self.longcontrol \
             else can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.GAP_DIST, clu11_speed, CS.CP.sccBus))
           self.cruise_gap_auto_switch_timer = 0
@@ -507,7 +507,7 @@ class CarController():
         self.res_speed = 0
 
     if self.model_speed > 65 and self.cancel_counter == 0 and not CS.acc_active and not CS.out.brakeLights and int(CS.VSetDis) > 30 and \
-     (CS.lead_distance < 149 or int(CS.clu_Vanz) > 30) and int(CS.clu_Vanz) >= 3 and self.auto_res_timer <= 0 and self.opkr_cruise_auto_res:
+     (20 < CS.lead_distance < 149 or int(CS.clu_Vanz) > 30) and int(CS.clu_Vanz) >= 3 and self.auto_res_timer <= 0 and self.opkr_cruise_auto_res:
       if self.opkr_cruise_auto_res_option == 0:
         can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.RES_ACCEL)) if not self.longcontrol \
          else can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.RES_ACCEL, clu11_speed, CS.CP.sccBus))  # auto res
